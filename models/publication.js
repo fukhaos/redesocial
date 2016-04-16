@@ -5,17 +5,22 @@ const mongoose = require('./config/db.js');
 const publicationSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  msg:String,
-  created: Date,
+    ref: 'User',
+    required: true
+  }
+  msg : {type: String, required : true},
+  created: {type: String, default : Date.now},
   comments: [{
-    {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true
+    }
+    msg : {
+      type: String,
+      required : true
     },
-    msg: String
   }]
 })
 
-exports.model = mongoose.model( 'Pubblication', publicationSchema);
+module.exports = mongoose.model( 'Pubblication', publicationSchema);

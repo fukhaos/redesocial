@@ -3,16 +3,15 @@
 const mongoose = require('./config/db.js');
 
 const userSchema = mongoose.Schema({
-  name: {type: String,
-    required: [true, "Esqueceu o nome"]
-  },
-  email:String,
-  password: String,
-  photo: String  ,
+  name: {type: String, required: true},
+  email : {type: String, required: true},
+  password: {type: String, required: true},
+  photo: String,
   friends: [
-    {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
+      required: true
     }
   ]
 })
