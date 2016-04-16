@@ -10,6 +10,10 @@ app.use(bodyParser.urlencoded({extends: true}));
 app.use(bodyParser.json());
 app.use(bodyParser());
 
+let authRoute = require("./routes/auth");
+
+app.use("/auth", authRoute);
+
 app.listen(3000, () =>{
   console.log("Rodando na porta 3000");
 })
