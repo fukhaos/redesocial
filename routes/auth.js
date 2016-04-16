@@ -3,13 +3,16 @@
 const express = require('express');
 const authRoute = express.Router();
 const User = require("../models/user");
+const jwt = require('jwt-simple');
+const secret = require('../config/secret');
 
 
 
 authRoute.post("/login", (req, res) => {
-  User.findOne({
-    email: req.body.email
-  }, 'name email password', (err, user) => {
+  var where = { email: req.body.email };
+  var select = 'name email password';
+
+  User.findOne(where, select, (err, user) => {
     if (err) return res.json({success: false, msg: err});
 
     if (!user) {
@@ -17,7 +20,8 @@ authRoute.post("/login", (req, res) => {
     }else{
       user.comparePassword(req.body.password, function (err, isMatch){
         if (isMatch && !err){
-            res.json({sucess: true, token: "AAAA"});
+          let token = jwt.encode({id: user._id}, secret);
+            res.json({sucess: true, token: token});
         }else{
           res.json({sucess: false, msg: "Falha na autenticacao senha inváalida"});
         }
