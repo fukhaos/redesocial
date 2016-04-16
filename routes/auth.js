@@ -5,6 +5,28 @@ const authRoute = express.Router();
 const User = require("../models/user");
 
 
+
+authRoute.post("/login", (req, res) => {
+  User.findOne({
+    email: req.body.email
+  }, 'name email password', (err, user) => {
+    if (err) return res.json({success: false, msg: err});
+
+    if (!user) {
+      res.json({success: false, msg: "Falha na autenticacao"});
+    }else{
+      user.comparePassword(req.body.password, function (err, isMatch){
+        if (isMatch && !err){
+            res.json({sucess: true, token: "AAAA"});
+        }else{
+          res.json({sucess: false, sgn: "Falha na autenticacao senha inváalida"});
+        }
+      });
+    }
+  })
+});
+
+
 authRoute.post("/signup", (req, res) => {
   var newUser = new User({
     name: req.body.name,

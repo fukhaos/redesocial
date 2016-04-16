@@ -1,6 +1,7 @@
 'use strict'
 
 const mongoose = require('../config/db.js');
+var bcrypt = require('bcrypt-nodejs');
 
 const userSchema = mongoose.Schema({
   name: {type: String, required: true},
@@ -21,7 +22,7 @@ const userSchema = mongoose.Schema({
 userSchema.pre('save', function (next){
   var user = this;
   if (this.isModified("password") || this.isNew){
-    var bcrypt = require('bcrypt-nodejs');
+
     bcrypt.genSalt(10, (err, salt)=> {
       if (err) return next(err);
 
@@ -35,5 +36,16 @@ userSchema.pre('save', function (next){
     next();
   }
 })
+
+
+userSchema.methods.comparePassword = function (passw, cb){
+  bcrypt.compare(passw, this.password, function(err, isMatch){
+    if (err){
+      return cb(err);
+    }
+
+    cb(null, isMatch);
+  })
+}
 
 module.exports = mongoose.model( 'User', userSchema);
