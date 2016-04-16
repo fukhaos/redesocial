@@ -3,7 +3,7 @@
 const express = require('express');
 const authRoute = express.Router();
 const User = require("../models/user");
-const jwt = require('jwt-simple');
+const jwt = require('jsonwebtoken');
 const secret = require('../config/secret');
 
 
@@ -20,10 +20,10 @@ authRoute.post("/login", (req, res) => {
     }else{
       user.comparePassword(req.body.password, function (err, isMatch){
         if (isMatch && !err){
-          let token = jwt.encode({id: user._id}, secret);
+          let token = jwt.sign({_id: user._id}, secret);
             res.json({sucess: true, token: token});
         }else{
-          res.json({sucess: false, msg: "Falha na autenticacao senha inváalida"});
+          res.json({sucess: false, msg: "Falha na autenticacao senha inválida"});
         }
       });
     }
