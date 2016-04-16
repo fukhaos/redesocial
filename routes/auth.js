@@ -19,7 +19,7 @@ authRoute.post("/login", (req, res) => {
         if (isMatch && !err){
             res.json({sucess: true, token: "AAAA"});
         }else{
-          res.json({sucess: false, sgn: "Falha na autenticacao senha inváalida"});
+          res.json({sucess: false, msg: "Falha na autenticacao senha inváalida"});
         }
       });
     }
